@@ -22,7 +22,42 @@ npm run dev                   # http://localhost:3000
 | `npm start`         | Serve the production build                                          |
 | `npm run lint`      | ESLint                                                              |
 | `npm run typecheck` | TypeScript, no output                                               |
-| `npm run images`    | Re-render the social cards and app icons (needs Chrome or Edge)     |
+| `npm run images`    | Re-render the social cards (site and coming-soon) and app icons (needs Chrome or Edge) |
+| `npm run ads`       | Export the social media artwork into `../advertisements images/` (needs `npm run dev`) |
+
+## Coming soon ⇄ live
+
+Until the apps are in the stores, manzel.af shows only a coming-soon page. The
+switch is one environment variable, read by `proxy.ts` on every request:
+
+| `SITE_MODE`          | What visitors get                                                  |
+| -------------------- | ------------------------------------------------------------------ |
+| unset (or not `live`) | **Coming soon.** `/fa`, `/ps`, `/en` show the coming-soon page; every other page (`/fa/pricing`, `/en/features`…) redirects there; the full site's social cards answer 404; the sitemap lists only the three language roots. |
+| `live`               | The full website. The coming-soon route is hidden.                 |
+
+It fails closed: a deployment that forgets the variable shows the coming-soon
+page, never the unreleased site.
+
+**On launch day:** set `SITE_MODE=live` in the hosting provider's environment
+variables and redeploy (with `next start` on your own server, a restart is
+enough — no rebuild needed). To work on the full site locally, put
+`SITE_MODE=live` in `.env.local`.
+
+The coming-soon page is `app/[lang]/soon/page.tsx` (its words are `soon` in
+the dictionaries; its building is `components/soon/lit-building.tsx`). It
+shares only the root shell with the site — fonts and theme — and none of its
+header, footer, metadata or structured data. The full site lives in
+`app/[lang]/(site)/`.
+
+## Social media artwork
+
+`npm run ads` (with `npm run dev` running) exports every post, story,
+cover and the animated story video into `../advertisements images/` — see
+the README there. The artwork is drawn by the ad studio,
+`app/[lang]/studio`, from `components/ads/` and the same brand components as
+the site. The studio exists only in development: a production build answers
+404, since it holds the launch-day artwork. Videos need ffmpeg (on PATH, or
+`pip install imageio-ffmpeg`).
 
 ## Environment
 
@@ -31,6 +66,7 @@ npm run dev                   # http://localhost:3000
 | `NEXT_PUBLIC_SITE_URL` | The public origin, e.g. `https://www.example.af`. Canonical URLs, hreflang, the sitemap and social cards are built from it — **set it before deploying.** |
 | `SUPABASE_URL`         | The app's Supabase project URL.                                        |
 | `SUPABASE_ANON_KEY`    | The app's public anon key. Used only to read `platform_settings`.      |
+| `SITE_MODE`            | `live` for the full website; anything else is the coming-soon page. |
 
 **Never put the service-role key here.** The website needs nothing but public,
 anon-readable data.
@@ -47,10 +83,12 @@ page says contacts are coming soon.
 ## Where things are
 
 ```
-app/[lang]/            one folder per page; [lang] is fa | ps | en
-  layout.tsx           <html lang dir>, fonts, theme script, header, footer, JSON-LD
+app/[lang]/            [lang] is fa | ps | en
+  layout.tsx           the shell: <html lang dir>, fonts, theme script
+  (site)/              the full website — layout (header, footer, JSON-LD) and one folder per page
+  soon/                the coming-soon page
   not-found.tsx        404 in the visitor's language
-  [...rest]/           any unknown path under a language → that 404
+lib/mode.ts            the launch switch
 app/global-not-found   404 for paths outside every language
 app/sitemap.ts         every page × every language, with hreflang
 app/robots.ts, manifest.ts, icon.svg, apple-icon.png

@@ -444,6 +444,41 @@ export const en = {
     home: 'Back to the home page',
   },
 
+  /**
+   * The coming-soon page, shown until launch (lib/mode.ts). It says what the
+   * brand is and who it is for — nothing about how the product works.
+   */
+  soon: {
+    metaTitle: 'Manzel — coming soon',
+    metaDescription: 'Manzel is coming soon: a new app for the people who live in Afghanistan’s apartment buildings, in Dari, Pashto and English.',
+    eyebrow: 'Coming soon',
+    title: 'Soon, every home',
+    titleAccent: 'lights up.',
+    lead: 'We are putting the finishing touches on a new app for the people who live in Afghanistan’s apartment buildings. It opens soon — in Dari, Pashto and English.',
+    storesTitle: 'Coming soon to',
+    contactTitle: 'Want to be among the first?',
+    contactBody: 'We are opening to a small number of buildings first. Get in touch and we will tell you more.',
+    noContacts: 'Our contact details will be here shortly.',
+    game: {
+      label: 'An apartment building at night. Each window is a home.',
+      window: 'Home {n}',
+      hint: 'Tap a window to switch on its light.',
+      progress: '{lit} of {total} homes lit',
+      done: 'Every home is lit. That is what we are building.',
+      reset: 'Turn the lights off',
+    },
+  },
+
+  /** Social media artwork (scripts/generate-ads.mts). Never rendered on the site. */
+  ads: {
+    teaser1: 'Something new is coming home.',
+    teaser2: 'The lights are coming on.',
+    follow: 'Follow us for the launch',
+    earlyAccess: 'Be among the first — message us on WhatsApp',
+    nowAvailable: 'Now available',
+    slide: 'Slide',
+  },
+
   /** The words inside the illustrated phone screens. */
   mockup: {
     building: 'Bagh-e Bala Residence',

@@ -2,19 +2,19 @@
  * The root layout. The language segment sits above it, so each language has
  * its own <html lang dir> from the first byte — no client-side flip from LTR
  * to RTL, and a crawler sees the right language on every page.
+ *
+ * Deliberately just the shell — fonts, theme, <html> — and nothing about the
+ * product: it wraps both the full site, (site)/layout.tsx, and the
+ * coming-soon page, soon/page.tsx, and the coming-soon page must not carry
+ * the site's description, navigation or structured data.
  */
 
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { notFound } from 'next/navigation';
 
-import { Footer } from '@/components/layout/footer';
-import { Header } from '@/components/layout/header';
 import { ThemeSync } from '@/components/layout/theme-sync';
-import { SiteJsonLd } from '@/components/seo/json-ld';
-import { getDictionary } from '@/lib/dictionary';
 import { isLocale, localeInfo, locales } from '@/lib/i18n';
-import { getPlatformInfo } from '@/lib/platform';
 import { brandName } from '@/lib/seo';
 import { site } from '@/lib/site';
 
@@ -72,17 +72,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  const dict = getDictionary(lang);
   return {
     metadataBase: new URL(site.url),
     applicationName: brandName(lang),
-    title: { default: dict.meta.siteTitle, template: `%s | ${brandName(lang)}` },
-    description: dict.meta.siteDescription,
     authors: [{ name: site.name }],
     creator: site.name,
     formatDetection: { telephone: false, email: false, address: false },
-    // `robots` is set per page (lib/seo.ts), not here, so a 404 carries only
-    // the noindex Next adds for it rather than two contradictory tags.
+    // Title, description and `robots` come from each page (lib/seo.ts), so a
+    // 404 carries only the noindex Next adds for it.
   };
 }
 
@@ -106,9 +103,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = getDictionary(lang);
   const info = localeInfo[lang];
-  const platform = await getPlatformInfo();
 
   return (
     <html
@@ -123,18 +118,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
       </head>
       <body className="flex min-h-dvh flex-col bg-bg text-fg antialiased">
         <ThemeSync />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-pill focus:bg-primary focus:px-5 focus:py-3 focus:font-bold focus:text-fg-on-primary"
-        >
-          {dict.nav.skip}
-        </a>
-        <Header locale={lang} dict={dict} />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer locale={lang} dict={dict} />
-        <SiteJsonLd locale={lang} dict={dict} platform={platform} />
+        {children}
       </body>
     </html>
   );

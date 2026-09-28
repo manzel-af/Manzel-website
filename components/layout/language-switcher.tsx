@@ -28,28 +28,48 @@ export function LanguageSwitcher({
   current,
   label,
   className = '',
+  tone = 'default',
+  path,
 }: {
   current: Locale;
   label: string;
   className?: string;
+  /** `night` for the always-dark coming-soon page. */
+  tone?: 'default' | 'night';
+  /**
+   * The path after the language to link to, when it is not the current one —
+   * the coming-soon page is shown at /fa but rendered from /fa/soon, and its
+   * links must not expose that.
+   */
+  path?: string;
 }) {
+  const night = tone === 'night';
   const pathname = usePathname() ?? `/${current}`;
 
   return (
-    <nav aria-label={label} className={`flex items-center rounded-pill border border-line bg-surface p-1 ${className}`}>
+    <nav
+      aria-label={label}
+      className={`flex items-center rounded-pill border p-1 ${night ? 'border-white/15 bg-white/5 backdrop-blur' : 'border-line bg-surface'} ${className}`}
+    >
       {locales.map((locale) => {
         const active = locale === current;
         const info = localeInfo[locale];
         return (
           <a
             key={locale}
-            href={swapLocale(pathname, locale)}
+            href={path === undefined ? swapLocale(pathname, locale) : `/${locale}${path}`}
             hrefLang={info.tag}
             lang={info.tag}
             aria-current={active ? 'true' : undefined}
             onClick={() => remember(locale)}
             className={`grid h-8 min-w-11 place-items-center rounded-pill px-2.5 text-[0.82rem] font-bold transition-colors ${
-              active ? 'bg-primary text-fg-on-primary' : 'text-fg-muted hover:text-fg'
+              active
+                ? night
+                  ? 'bg-saffron-300 text-lapis-950'
+                  : 'bg-primary text-fg-on-primary'
+                : night
+                  ? 'text-white/75 hover:text-white'
+                  : 'text-fg-muted hover:text-fg'
             } ${info.script === 'latin' ? 'tracking-wide' : ''}`}
           >
             {locale === 'en' ? 'EN' : info.nativeName}

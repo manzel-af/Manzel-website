@@ -1,7 +1,8 @@
 /**
  * Renders the site's raster images with a real browser:
  *
- *   public/og/{fa,ps,en}.jpg   1200×630 social cards, one per language
+ *   public/og/{fa,ps,en}.jpg   1200×630 social cards for the full site
+ *   public/og/soon-*.jpg       the coming-soon page's cards — brand only
  *   app/apple-icon.png         180×180 home-screen icon
  *   public/icon-{192,512}.png  manifest icons
  *
@@ -131,6 +132,69 @@ for (const [locale, dict] of Object.entries(cards)) {
   shoot(html, png, 1200, 630);
   const jpg = join(root, 'public', 'og', `${locale}.jpg`);
   mkdirSync(resolve(jpg, '..'), { recursive: true });
+  await sharp(png).jpeg({ quality: 86, mozjpeg: true }).toFile(jpg);
+  console.log('✓', jpg.replace(root, '.'));
+}
+
+/* ------------------------------------------------------------------------ */
+/* Coming-soon cards: the brand and "coming soon", nothing about the product. */
+
+const STAR_FIELD = Array.from({ length: 60 }, (_, i) => {
+  const x = (i * 197) % 1200;
+  const y = (i * 113) % 360;
+  const size = i % 7 === 0 ? 3 : i % 3 === 0 ? 2 : 1.4;
+  return `<i style="left:${x}px;top:${y}px;width:${size}px;height:${size}px;opacity:${0.3 + ((i * 37) % 60) / 100}"></i>`;
+}).join('');
+
+for (const [locale, dict] of Object.entries(cards)) {
+  const rtl = locale !== 'en';
+  const font = rtl ? 'Vazirmatn' : 'Sansation, Vazirmatn';
+  const windows = Array.from({ length: 20 }, (_, i) => `<b class="${[1, 3, 6, 8, 9, 13, 14, 17, 19].includes(i) ? 'on' : ''}"></b>`).join('');
+  const html = `<!doctype html>
+<html lang="${locale}" dir="${rtl ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><style>
+  ${FONT_FACES}
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: ${font}; color: #F3F1EC;
+    background: linear-gradient(#060f1f, #0c1d38 55%, #15315a); position: relative; }
+  i { position: absolute; border-radius: 50%; background: #fff; }
+  .moon { position: absolute; ${rtl ? 'left' : 'right'}: 90px; top: 60px; width: 56px; height: 56px; border-radius: 50%; background: #fbeac0; box-shadow: 0 0 50px 10px rgba(251,234,192,.2); }
+  .moon::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #081426; transform: translate(${rtl ? '14px' : '-14px'}, -5px); }
+  svg.m { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 260px; }
+  .wrap { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 90px; gap: 70px; }
+  .text { flex: 1; }
+  .chip { display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06); color: #F7D78D; font-weight: 800; font-size: 26px; }
+  .chip::before { content: ''; width: 12px; height: 12px; border-radius: 50%; background: #F0BE51; box-shadow: 0 0 14px #F0BE51; }
+  .word { font-family: Vazirmatn; font-weight: 900; font-size: 120px; line-height: 1.05; margin-top: 26px; }
+  .latin { font-family: Sansation; font-weight: 700; font-size: 24px; letter-spacing: .3em; color: rgba(243,241,236,.6); }
+  h1 { margin-top: 18px; font-weight: 800; font-size: ${rtl ? 36 : 38}px; line-height: 1.45; color: rgba(243,241,236,.85); max-width: 640px; }
+  h1 span { color: #F0BE51; }
+  .bldg { position: relative; width: 300px; align-self: flex-end; margin-bottom: 0; }
+  .glow { position: absolute; inset: 40px -40px 0; background: rgba(240,190,81,.18); filter: blur(60px); border-radius: 50%; }
+  .body { position: relative; background: linear-gradient(#1c3d70, #11274a); border: 1px solid rgba(255,255,255,.1); border-radius: 26px 26px 0 0;
+    padding: 26px 22px 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 14px; }
+  b { display: block; height: 58px; border-radius: 999px 999px 4px 4px; background: linear-gradient(#1f3a68, #0f203d); }
+  b.on { background: linear-gradient(#f7d78d, #f0be51 55%, #d9962b); box-shadow: 0 0 26px rgba(240,190,81,.55); }
+  .door { grid-column: 2 / span 2; display: flex; justify-content: center; padding-top: 6px; }
+</style></head><body>
+  ${STAR_FIELD}
+  <div class="moon"></div>
+  <svg class="m" viewBox="0 0 400 200" preserveAspectRatio="none">
+    <path d="M0 120 L40 78 L70 98 L118 44 L160 92 L196 64 L236 104 L282 50 L324 96 L360 70 L400 96 V200 H0Z" fill="#132a4b" opacity=".9"/>
+    <path d="M0 150 L52 118 L96 140 L150 104 L204 142 L262 112 L318 146 L362 124 L400 140 V200 H0Z" fill="#0e2240"/>
+  </svg>
+  <div class="wrap">
+    <div class="text">
+      <span class="chip">${dict.soon.eyebrow}</span>
+      <div class="word" lang="fa">منزل</div>${rtl ? '' : '<div class="latin">MANZEL</div>'}
+      <h1>${dict.soon.title} <span>${dict.soon.titleAccent}</span></h1>
+    </div>
+    <div class="bldg"><div class="glow"></div><div class="body">${windows}<div class="door">${MARK(64)}</div></div></div>
+  </div>
+</body></html>`;
+  const png = join(work, `soon-${locale}.png`);
+  shoot(html, png, 1200, 630);
+  const jpg = join(root, 'public', 'og', `soon-${locale}.jpg`);
   await sharp(png).jpeg({ quality: 86, mozjpeg: true }).toFile(jpg);
   console.log('✓', jpg.replace(root, '.'));
 }

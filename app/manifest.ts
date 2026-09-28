@@ -6,7 +6,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `${site.wordmark} — ${site.name}`,
     short_name: site.wordmark,
-    description: 'Apartment building accounts for Afghanistan — Dari, Pashto and English, offline first.',
+    // Kept general: the manifest is served in coming-soon mode too.
+    description: 'Manzel — for the apartment buildings of Afghanistan.',
     start_url: '/',
     display: 'browser',
     dir: 'rtl',

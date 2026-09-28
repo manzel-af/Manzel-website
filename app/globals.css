@@ -403,3 +403,79 @@ input[type="range"].brand-range::-moz-range-thumb {
     linear-gradient(#000 0 0) top / 100% calc(100% - var(--tooth)) no-repeat,
     conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(var(--tooth) * 2) var(--tooth) repeat-x;
 }
+
+/* ---------------------------------------------------------------------------
+ * The coming-soon page: a building at night
+ * ------------------------------------------------------------------------ */
+
+/* A window pane: dark glass with a streak of reflected sky, or lamplight. */
+.window-pane {
+  background:
+    linear-gradient(125deg, transparent 30%, rgb(255 255 255 / 0.07) 42%, transparent 52%),
+    linear-gradient(180deg, #1f3a68, #0f203d);
+  transition: background 0.5s ease, filter 0.3s ease;
+}
+button:hover > .window-pane:not(.is-lit) {
+  filter: brightness(1.35);
+}
+.window-pane.is-lit {
+  background:
+    radial-gradient(80% 60% at 50% 30%, #fff4d6, transparent 70%),
+    linear-gradient(180deg, #f7d78d, #f0be51 55%, #d9962b);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .window-pane.is-lit { animation: flick-on 0.55s steps(1, end) both; }
+}
+@keyframes flick-on {
+  0% { opacity: 0.35; } 18% { opacity: 1; } 30% { opacity: 0.55; } 44% { opacity: 1; }
+}
+
+/* Lamps beside the door, and the door itself, which glow when every home is lit. */
+.lamp {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #6d5a2f;
+  transition: background 0.6s ease, box-shadow 0.6s ease;
+}
+.lamp.is-on {
+  background: #f7d78d;
+  box-shadow: 0 0 18px 6px rgb(240 190 81 / 0.55);
+}
+.door::before {
+  content: "";
+  position: absolute;
+  inset: 18% 8% -6%;
+  border-radius: 999px;
+  background: rgb(240 190 81 / 0.45);
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.door.is-open::before { opacity: 1; }
+.building-done {
+  box-shadow:
+    0 0 0 1px rgb(240 190 81 / 0.45),
+    0 0 60px -6px rgb(240 190 81 / 0.45),
+    0 50px 90px -35px rgb(0 0 0 / 0.85);
+}
+
+/* Stars: a slow twinkle, each on its own clock. */
+.star {
+  position: absolute;
+  border-radius: 999px;
+  background: #fff;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .star { animation: twinkle 4s ease-in-out infinite; }
+  .sparkle { animation: sparkle 1.4s var(--ease-out-soft) both; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--o, 0.7); }
+  50% { opacity: 0.15; }
+}
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0.2) rotate(-40deg); }
+  40% { opacity: 1; transform: scale(1.15) rotate(10deg); }
+  100% { opacity: 0.85; transform: scale(1) rotate(0); }
+}
