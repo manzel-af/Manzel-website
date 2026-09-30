@@ -27,6 +27,7 @@ import { pathToFileURL } from 'node:url';
 // Installed with Next (it optimises images); used here to turn the cards into JPEGs.
 import sharp from 'sharp';
 
+import { BRAND, LOCKUP_STACKED, MARK as ARCH_M, TILE, WORDMARK_DARI, type BrandShape } from '../components/brand/paths.ts';
 import { en } from '../dictionaries/en.ts';
 import { fa } from '../dictionaries/fa.ts';
 import { ps } from '../dictionaries/ps.ts';
@@ -75,15 +76,31 @@ const FONT_FACES = `
   @font-face { font-family: Sansation; src: url('${fonts}/Sansation-Bold.woff2') format('woff2'); font-weight: 700; }
 `;
 
-const MARK = (size: number) => `
-  <svg width="${size}" height="${size}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="g" x1="24" y1="2" x2="24" y2="46" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3467BD"/><stop offset="1" stop-color="#1A4176"/></linearGradient></defs>
-    <path d="M24 2.5 6 15.5V44a1.5 1.5 0 0 0 1.5 1.5h33A1.5 1.5 0 0 0 42 44V15.5Z" fill="url(#g)"/>
-    <path d="M24 11.5c-5.2 0-9 3.9-9 9.2V37a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V20.7c0-5.3-3.8-9.2-9-9.2Z" fill="#F0BE51"/>
-    <rect x="22.9" y="13.5" width="2.2" height="24.5" rx="1" fill="#1E4E8C" opacity="0.92"/>
-    <rect x="15" y="24.4" width="18" height="2.2" rx="1" fill="#1E4E8C" opacity="0.92"/>
+// The identity ("Taq"), from components/brand/paths.ts — the same shapes the
+// site and the app draw. Run scripts/brand.mts first if the brand changed.
+const pieces = (shape: BrandShape, ink: string) =>
+  shape.letters.map((d) => `<path fill-rule="evenodd" fill="${ink}" d="${d}"/>`).join('') +
+  shape.light.map((d) => `<path fill-rule="evenodd" fill="${BRAND.saffron}" d="${d}"/>`).join('');
+
+/** The app icon: the arch-m on its rounded lapis tile. `radius` 0 for a full square. */
+const MARK = (size: number, radius: number = TILE.radius) => `
+  <svg width="${size}" height="${size}" viewBox="0 0 ${TILE.size} ${TILE.size}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${TILE.size}" height="${TILE.size}" rx="${radius}" fill="${BRAND.lapis}"/>${pieces(ARCH_M, BRAND.paper)}
   </svg>`;
+
+/** The arch-m alone, in paper: for a doorway on a dark ground. */
+const GLYPH = (width: number) => `
+  <svg width="${width}" height="${(width * ARCH_M.height) / ARCH_M.width}" viewBox="${ARCH_M.viewBox}" xmlns="http://www.w3.org/2000/svg">
+    ${pieces(ARCH_M, BRAND.paper)}
+  </svg>`;
+
+/** The name in paper: منزل, or منزل over manzel on English cards. `height` is the Dari's. */
+const NAME = (height: number, latin: boolean) => {
+  const shape = latin ? LOCKUP_STACKED : WORDMARK_DARI;
+  const total = (height * shape.height) / WORDMARK_DARI.height;
+  const width = (total * shape.width) / shape.height;
+  return `<svg width="${width}" height="${total}" viewBox="${shape.viewBox}" xmlns="http://www.w3.org/2000/svg">${pieces(shape, BRAND.paper)}</svg>`;
+};
 
 const GIRIH = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23F0BE51' stroke-opacity='0.07' stroke-width='1.2'%3E%3Cpath d='M32 6l7 16 16 7-16 7-7 16-7-16-16-7 16-7z'/%3E%3Cpath d='M32 14l11 7v14l-11 7-11-7V21z'/%3E%3C/g%3E%3C/svg%3E")`;
 
@@ -103,8 +120,6 @@ for (const [locale, dict] of Object.entries(cards)) {
   .wrap { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 80px; gap: 40px; }
   .text { flex: 1; }
   .brand { display: flex; align-items: center; gap: 18px; }
-  .word { font-family: Vazirmatn; font-weight: 900; font-size: 64px; line-height: 1; }
-  .latin { font-family: Sansation; font-weight: 700; font-size: 20px; letter-spacing: .28em; color: rgba(243,241,236,.6); margin-top: 6px; }
   h1 { margin-top: 44px; font-weight: 900; font-size: ${rtl ? 50 : 56}px; line-height: ${rtl ? 1.4 : 1.15}; max-width: 720px; text-wrap: balance; }
   h1 span { color: #F0BE51; }
   .chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
@@ -119,7 +134,7 @@ for (const [locale, dict] of Object.entries(cards)) {
 </style></head><body><div class="wrap">
   <div class="text">
     <div class="brand">
-      <div><div class="word" lang="fa">منزل</div>${rtl ? '' : '<div class="latin">MANZEL</div>'}</div>
+      <div class="name" lang="fa">${NAME(74, !rtl)}</div>
     </div>
     <h1>${dict.home.hero.title} <span>${dict.home.hero.titleAccent}</span></h1>
     <div class="chips">${dict.home.hero.chips.slice(0, 3).map((chip) => `<span class="chip">${chip}</span>`).join('')}</div>
@@ -162,11 +177,11 @@ for (const [locale, dict] of Object.entries(cards)) {
   svg.m { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 260px; }
   .wrap { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 90px; gap: 70px; }
   .text { flex: 1; }
+  .name { margin-top: 30px; direction: ltr; }
+  .name svg { display: block; }
   .chip { display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.06); color: #F7D78D; font-weight: 800; font-size: 26px; }
   .chip::before { content: ''; width: 12px; height: 12px; border-radius: 50%; background: #F0BE51; box-shadow: 0 0 14px #F0BE51; }
-  .word { font-family: Vazirmatn; font-weight: 900; font-size: 120px; line-height: 1.05; margin-top: 26px; }
-  .latin { font-family: Sansation; font-weight: 700; font-size: 24px; letter-spacing: .3em; color: rgba(243,241,236,.6); }
   h1 { margin-top: 18px; font-weight: 800; font-size: ${rtl ? 36 : 38}px; line-height: 1.45; color: rgba(243,241,236,.85); max-width: 640px; }
   h1 span { color: #F0BE51; }
   .bldg { position: relative; width: 300px; align-self: flex-end; margin-bottom: 0; }
@@ -186,10 +201,10 @@ for (const [locale, dict] of Object.entries(cards)) {
   <div class="wrap">
     <div class="text">
       <span class="chip">${dict.soon.eyebrow}</span>
-      <div class="word" lang="fa">منزل</div>${rtl ? '' : '<div class="latin">MANZEL</div>'}
+      <div class="name" lang="fa">${NAME(118, !rtl)}</div>
       <h1>${dict.soon.title} <span>${dict.soon.titleAccent}</span></h1>
     </div>
-    <div class="bldg"><div class="glow"></div><div class="body">${windows}<div class="door">${MARK(64)}</div></div></div>
+    <div class="bldg"><div class="glow"></div><div class="body">${windows}<div class="door">${GLYPH(78)}</div></div></div>
   </div>
 </body></html>`;
   const png = join(work, `soon-${locale}.png`);
@@ -201,15 +216,18 @@ for (const [locale, dict] of Object.entries(cards)) {
 
 /* ------------------------------------------------------------------------ */
 
-function iconHtml(size: number, padding: number) {
+/** A home-screen icon: the app icon, full bleed (the device rounds it) or on its own rounded tile. */
+function iconHtml(size: number, square: boolean) {
   return `<!doctype html><html><head><style>
-    * { margin: 0; } body { width: ${size}px; height: ${size}px; display: grid; place-items: center;
-    background: linear-gradient(160deg, #FBF8F3, #F5F1E9); }
-  </style></head><body>${MARK(size - padding * 2)}</body></html>`;
+    * { margin: 0; } html, body { width: ${size}px; height: ${size}px; background: transparent; }
+    svg { display: block; }
+  </style></head><body>${MARK(size, square ? 0 : TILE.radius)}</body></html>`;
 }
 
-shoot(iconHtml(180, 22), join(root, 'app', 'apple-icon.png'), 180, 180);
-shoot(iconHtml(192, 22), join(root, 'public', 'icon-192.png'), 192, 192);
-shoot(iconHtml(512, 60), join(root, 'public', 'icon-512.png'), 512, 512);
+// iOS draws its own rounded corners over a square icon (and turns
+// transparency black); the manifest icons carry their own.
+shoot(iconHtml(180, true), join(root, 'app', 'apple-icon.png'), 180, 180);
+shoot(iconHtml(192, false), join(root, 'public', 'icon-192.png'), 192, 192);
+shoot(iconHtml(512, false), join(root, 'public', 'icon-512.png'), 512, 512);
 
 rmSync(work, { recursive: true, force: true });

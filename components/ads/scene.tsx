@@ -175,7 +175,6 @@ export function Building({
                     <span className="window-pane is-lit arch absolute inset-y-0 inset-x-[13%] [animation:none]" style={{ opacity: level }} />
                     <span className="arch absolute inset-y-0 inset-x-[13%]">
                       <span className="absolute inset-x-0 inset-y-[14%] mx-auto w-[6%] rounded-full bg-[#10254a]/70" />
-                      <span className="absolute inset-x-[12%] top-[48%] h-[4%] rounded-full bg-[#10254a]/70" />
                     </span>
                   </span>
                 );
@@ -188,7 +187,7 @@ export function Building({
           <Lamp level={lamps} />
           <span className="relative grid h-24 w-20 place-items-center">
             <span className="absolute inset-x-[8%] bottom-[-6%] top-[18%] rounded-full bg-saffron-300/45 blur-[18px]" style={{ opacity: lamps }} />
-            <LogoMark size={64} className="relative" />
+            <LogoMark size={64} variant="mark" light className="relative" />
           </span>
           <Lamp level={lamps} />
         </div>

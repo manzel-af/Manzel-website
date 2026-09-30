@@ -162,7 +162,6 @@ export function LitBuilding({ locale, dir, labels }: { locale: Locale; dir: 'rtl
                         />
                         <span aria-hidden="true" className={`window-pane arch absolute inset-y-0 inset-x-[13%] ${on ? 'is-lit' : ''}`}>
                           <span className="absolute inset-x-0 inset-y-[14%] mx-auto w-[6%] rounded-full bg-[#10254a]/70" />
-                          <span className="absolute inset-x-[12%] top-[48%] h-[4%] rounded-full bg-[#10254a]/70" />
                         </span>
                       </button>
                     );
@@ -176,7 +175,7 @@ export function LitBuilding({ locale, dir, labels }: { locale: Locale; dir: 'rtl
           <div aria-hidden="true" className="relative flex items-end justify-center gap-6 pt-4">
             <span className={`lamp mb-10 ${done ? 'is-on' : ''}`} />
             <span className={`door relative grid h-24 w-20 place-items-center ${done ? 'is-open' : ''}`}>
-              <LogoMark size={64} className="relative" />
+              <LogoMark size={64} variant="mark" light className="relative" />
             </span>
             <span className={`lamp mb-10 ${done ? 'is-on' : ''}`} />
           </div>

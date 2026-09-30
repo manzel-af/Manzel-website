@@ -103,7 +103,16 @@ lib/format.ts          numbers and money exactly as the app prints them (۱٬۵�
 lib/seo.ts             titles, canonical, hreflang, Open Graph for every page
 lib/site.ts            name, URL, store links, brand colours
 scripts/generate-images.mts   social cards (public/og) and icons
+assets/brand/          the identity ("Taq", 2026-09-30): the designer's SVGs
+scripts/brand.mts      assets/brand → components/brand/paths.ts + app/icon.svg
 ```
+
+**The logo** is the "Taq" identity: the m and n of *manzel* drawn as pointed
+Afghan arches with a light inside the n, and منزل with a gold dot. It lives only
+in `assets/brand/*.svg` (the app repo has the same files). After changing them:
+`node scripts/brand.mts`, then `node scripts/generate-images.mts`, then
+`npm run ads` with the dev server up. Draw it with `LogoMark` / `Logo` from
+`components/brand/logo.tsx`, never by hand.
 
 ## Things to fill in before launch
 
