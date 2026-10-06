@@ -19,6 +19,7 @@ const PRIORITY: Record<keyof typeof PAGE_PATHS, number> = {
   contact: 0.6,
   privacy: 0.3,
   terms: 0.3,
+  deleteAccount: 0.2,
 };
 
 /**

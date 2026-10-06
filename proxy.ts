@@ -10,12 +10,18 @@ import { isLive, SOON_OG_PREFIX, SOON_SEGMENT } from '@/lib/mode';
  *    the browser's Accept-Language, then Dari.
  * 2. The launch switch (lib/mode.ts). Until SITE_MODE=live:
  *    - `/fa`, `/ps`, `/en` show the coming-soon page, with the URL unchanged;
+ *    - the pages the app and the stores link to — privacy, terms,
+ *      delete-account, and contact (where deletion is asked for) — stay
+ *      reachable: Apple and Google check them before they publish the app;
  *    - every other page — /fa/pricing, /en/features… — redirects to its
- *      language's coming-soon page, so none of the full site is reachable;
+ *      language's coming-soon page, so none of the rest is reachable;
  *    - the full site's social cards (/og/fa.jpg…) answer 404: they carry the
  *      site's headline.
  *    Once live, the coming-soon route itself is hidden instead.
  */
+/** Reachable while coming soon: the app links to them and the stores check them. */
+const OPEN_WHILE_SOON = new Set(['privacy', 'terms', 'delete-account', 'contact']);
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const live = isLive();
@@ -42,6 +48,7 @@ export function proxy(request: NextRequest) {
       url.pathname = `/${first}/${SOON_SEGMENT}`;
       return NextResponse.rewrite(url);
     }
+    if (subpath.length === 1 && OPEN_WHILE_SOON.has(subpath[0])) return;
     return redirectTo(request, `/${first}`);
   }
 

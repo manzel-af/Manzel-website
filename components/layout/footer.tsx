@@ -41,6 +41,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       links: [
         { href: `${base}/privacy`, label: dict.meta.pages.privacy.title },
         { href: `${base}/terms`, label: dict.meta.pages.terms.title },
+        { href: `${base}/delete-account`, label: dict.meta.pages.deleteAccount.title },
       ],
     },
   ];

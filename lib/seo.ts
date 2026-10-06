@@ -25,6 +25,7 @@ export const PAGE_PATHS: Record<PageKey, string> = {
   contact: '/contact',
   privacy: '/privacy',
   terms: '/terms',
+  deleteAccount: '/delete-account',
 };
 
 /** Every language's URL for one page, keyed by hreflang tag. */

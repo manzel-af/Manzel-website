@@ -14,9 +14,9 @@ import type { Locale } from '@/lib/i18n';
 
 /** When the privacy policy and terms last changed. Update with the text. */
 const UPDATED = {
-  iso: '2026-09-26',
-  // 4 Mizan 1405 in the Solar Hijri calendar.
-  label: { fa: '۴ میزان ۱۴۰۵', ps: '۴ تله ۱۴۰۵', en: '4 Mizan 1405 (26 September 2026)' } as Record<Locale, string>,
+  iso: '2026-10-05',
+  // 13 Mizan 1405 in the Solar Hijri calendar.
+  label: { fa: '۱۳ میزان ۱۴۰۵', ps: '۱۳ تله ۱۴۰۵', en: '13 Mizan 1405 (5 October 2026)' } as Record<Locale, string>,
 };
 
 export function LegalDocument({
