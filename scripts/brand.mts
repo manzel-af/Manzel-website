@@ -2,7 +2,9 @@
  * The Manzel identity ("Taq", 2026-09-30), from its source files to the site.
  *
  * Source: assets/brand/*.svg — the designer's files (the app repo has the same
- * copies, with its own scripts/brand.mjs). Change the identity there, then:
+ * copies, with its own scripts/brand.mjs). In the lockups منزل and manzel are
+ * one size (rebalanced 2026-10-10; see the app's scripts/brand.mjs). Change the
+ * identity there, then:
  *
  *   node scripts/brand.mts          the shapes and the favicon
  *   node scripts/generate-images.mts   the icons and social cards, from them

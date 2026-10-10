@@ -84,8 +84,10 @@ export function Logo({
   light?: boolean;
 }) {
   const shape = latin ? LOCKUP_HORIZONTAL : WORDMARK_DARI;
-  // The Dari letters are the full height of the Dari wordmark, and 300 of the
-  // horizontal lockup's 300 units: one size setting reads the same either way.
+  // The Dari letters are the full height of the Dari wordmark, and still the
+  // full height of the horizontal lockup (منزل is drawn at the size of manzel
+  // there, its ل reaching the top of the l): one size setting gives the same
+  // Dari on every page.
   const height = size;
   const width = (height * shape.width) / shape.height;
 
