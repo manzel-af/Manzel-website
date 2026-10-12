@@ -7,7 +7,10 @@
  * docs/THREAT-MODEL.md and docs/database/CHANGELOG.md in the app. No invented
  * numbers, no testimonials from people who do not exist.
  *
- * `{name}` placeholders are filled by `fill()` in lib/dictionary.ts.
+ * `{name}` placeholders are filled by `fill()` in lib/dictionary.ts. Three
+ * names are mailboxes, never typed out here: `{info}`, `{support}` and
+ * `{developer}` become links to the addresses in lib/site.ts
+ * (`withMailboxes()` in components/ui/mail-link.tsx).
  */
 
 export const en = {
@@ -380,6 +383,7 @@ export const en = {
       { title: 'Short memories', body: 'The gate log keeps 30 days, then deletes itself. A log that grows for years is surveillance, not security.' },
       { title: 'No trackers. Anywhere.', body: 'No advertising, no analytics and no third-party trackers — in the app, and on this website.' },
     ],
+    report: 'If you have found a security weakness in Manzel, please report it privately to {developer}.',
   },
 
   downloadPage: {
@@ -402,6 +406,8 @@ export const en = {
     lead: 'Questions about getting started, about pricing, or about your building — we answer every one.',
     inApp: 'Already using Manzel? Open Settings → Manzel support to chat with us directly, and send a screenshot if it helps.',
     noContacts: 'Our contact details will be published here shortly. Until then, please use the support chat inside the app.',
+    generalTitle: 'General questions',
+    generalBody: 'Partnerships, the press, or anything that is not about using the app.',
   },
 
   legal: {
@@ -416,9 +422,9 @@ export const en = {
       { title: 'How long we keep it', body: 'For as long as you are part of the building and the building uses Manzel. The gate log is deleted after 30 days. Sign-in codes are deleted within an hour of expiring.' },
       { title: 'On your phone', body: 'Manzel keeps a copy of your building’s records on your phone so it works offline. That copy is encrypted, and signing out erases it.' },
       { title: 'This website', body: 'This website uses no analytics, no advertising and no tracking cookies. It remembers only your chosen language and theme, on your own device.' },
-      { title: 'Your choices', body: 'You can ask to see or correct your information by contacting us, and delete your account at any time (below).' },
+      { title: 'Your choices', body: 'You can ask to see or correct your information by writing to {support}, and delete your account at any time (below).' },
       { title: 'Deleting your account', body: 'In the app: Settings → Privacy and safety → Delete account. Without the app: follow the steps on the Delete your account page. We remove your name, phone number and email, your sign-in, your place in every building, what you wrote and sent in building chats, your support conversations, devices and notifications. Payments you recorded, notices you posted, repairs you reported and visitor passes you made stay in the building’s records without your name, because the building’s accounts need them; a record of what was done in the app may be kept for security.' },
-      { title: 'Contact', body: 'Questions about privacy can be sent to us using the details on the contact page.' },
+      { title: 'Contact', body: 'Send questions about privacy, and requests about your information, to {support}. The other ways to reach us are on the contact page.' },
     ],
     terms: [
       { title: 'Using Manzel', body: 'Manzel is provided to help apartment buildings manage their accounts, communication and gate. By using it you agree to use it lawfully and only for your building.' },
@@ -429,11 +435,11 @@ export const en = {
       { title: 'Building chat rules', body: 'Be respectful. No insults, threats, hate, sexual content, spam or advertising. Hold a message to report it or to block its writer. Managers remove messages that break these rules, and we may suspend accounts that keep breaking them.' },
       { title: 'Availability', body: 'We work to keep Manzel available and to protect your data, but we cannot promise it will never be interrupted. The app is designed to keep working offline during outages.' },
       { title: 'Changes', body: 'We may update these terms. If a change is significant, we will say so in the app before it takes effect.' },
-      { title: 'Contact', body: 'Questions about these terms can be sent to us using the details on the contact page.' },
+      { title: 'Contact', body: 'Send questions about these terms to {support}. The other ways to reach us are on the contact page.' },
     ],
     deleteAccount: [
       { title: 'In the app', body: 'Open Manzel and go to Settings → Privacy and safety → Delete account. Read what is deleted, then confirm. It happens at once.' },
-      { title: 'Without the app', body: 'Contact us using the details below — by phone, WhatsApp or email — from the phone number or email address of the account, and say that you want it deleted. We delete it as soon as we have confirmed that it is yours.' },
+      { title: 'Without the app', body: 'Ask us from the account’s own phone number or email address: email {support}, or call us or message us on WhatsApp using the details below, and say that you want the account deleted. We delete it as soon as we have confirmed that it is yours.' },
       { title: 'What is deleted', body: 'Your name, phone number and email, your sign-in, your place in every building and office, what you wrote and sent in building chats, your conversations with Manzel’s support and your ideas, and your devices, notifications and call history.' },
       { title: 'What stays', body: 'Payments you recorded, notices you posted, repairs you reported and visitor passes you made stay in the building’s records without your name, because the building’s accounts need them. Your flat’s bills and receipts belong to the building. A record of what was done in the app may be kept for security.' },
       { title: 'If you manage a building', body: 'If you are the only manager of a building or of a complex’s office, make someone else a manager first, so the building is not left without one.' },

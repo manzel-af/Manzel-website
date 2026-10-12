@@ -1,0 +1,8 @@
+# Manzel: where to report a security problem (RFC 9116).
+# Please write privately, in English, Dari or Pashto.
+# Renew "Expires" before it passes, then redeploy: an expired file is ignored.
+
+Contact: mailto:developer@manzel.af
+Expires: 2027-10-10T00:00:00.000Z
+Preferred-Languages: en, fa, ps
+Canonical: https://manzel.af/.well-known/security.txt

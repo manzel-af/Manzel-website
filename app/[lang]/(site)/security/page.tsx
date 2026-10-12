@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FinalCta } from '@/components/sections/home';
 import { PageHero } from '@/components/sections/page-hero';
 import { Icon, type IconName } from '@/components/ui/icon';
+import { withMailboxes } from '@/components/ui/mail-link';
 import { Container, Section } from '@/components/ui/section';
 import { getDictionary, localeFrom } from '@/lib/dictionary';
 import { localizeDigits } from '@/lib/format';
@@ -106,6 +107,10 @@ export default async function SecurityPage({ params }: PageProps<'/[lang]/securi
               {dict.meta.pages.privacy.title}
               <Icon name="arrow" size={18} />
             </Link>
+          </p>
+          {/* Where to report a weakness — the same address as /.well-known/security.txt. */}
+          <p className="reveal mx-auto mt-5 max-w-2xl text-center leading-relaxed text-white/70">
+            {withMailboxes(page.report, 'font-bold text-saffron-300 underline-offset-4 hover:underline')}
           </p>
         </Container>
       </Section>

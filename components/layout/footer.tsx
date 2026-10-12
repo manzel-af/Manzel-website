@@ -4,6 +4,9 @@
  *
  * It also links every page in every language, which gives search engines a
  * plain-HTML path to each translation alongside the hreflang tags.
+ *
+ * The address under the tagline is the general one, info@. Help with the app
+ * has its own contacts on the contact page, from the operator's settings.
  */
 
 import Link from 'next/link';
@@ -11,10 +14,12 @@ import Link from 'next/link';
 import { Logo } from '@/components/brand/logo';
 import { Container } from '@/components/ui/section';
 import { Icon } from '@/components/ui/icon';
+import { MailLink } from '@/components/ui/mail-link';
 import type { Dictionary } from '@/lib/dictionary';
 import { localizeDigits } from '@/lib/format';
 import { localeInfo, locales, type Locale } from '@/lib/i18n';
 import { brandName } from '@/lib/seo';
+import { site } from '@/lib/site';
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const { nav, footer } = dict;
@@ -59,6 +64,12 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div className="flex max-w-sm flex-col gap-5">
             <Logo light latin={locale === 'en'} size={40} />
             <p className="text-lg font-semibold text-white/85">{footer.tagline}</p>
+            <MailLink
+              address={site.email.info}
+              className="flex w-fit items-center gap-2 text-[0.95rem] font-semibold text-white/75 transition-colors hover:text-white"
+            >
+              <Icon name="mail" size={16} className="text-saffron-300" />
+            </MailLink>
             <p className="flex items-center gap-2 text-sm text-white/60">
               <Icon name="eyeOff" size={16} className="text-saffron-300" />
               {footer.noTrackers}

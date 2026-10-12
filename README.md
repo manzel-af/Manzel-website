@@ -77,8 +77,32 @@ The monthly platform fee, the grace period and the support phone, WhatsApp and
 email are read from the same `platform_settings` row the operator console edits
 (`lib/platform.ts`). Pages are static and revalidated hourly, so a change in the
 console reaches the website within the hour, with no redeploy. If Supabase
-cannot be reached, the V025 defaults are shown (500 ؋, 15 days) and the contact
-page says contacts are coming soon.
+cannot be reached, the V025 defaults are shown (500 ؋, 15 days) and the support
+email is `support@manzel.af`, with no phone or WhatsApp. A contact the operator
+clears in the console disappears here too.
+
+## Email addresses
+
+Three mailboxes, each spelled once, in `site.email` (`lib/site.ts`):
+
+| Address | For | Where it appears |
+| --- | --- | --- |
+| `info@manzel.af` | General questions: partnerships, the press, anything that is not help with the app | Footer, contact page, Organization structured data |
+| `support@manzel.af` | Help with the app; requests about a person's own data, deletion included | Contact cards (live from `platform_settings`, this is the fallback), privacy policy, terms, delete-account page |
+| `developer@manzel.af` | Security reports and technical questions | `public/.well-known/security.txt`, the security page |
+
+Copy never types an address: the dictionaries write `{info}`, `{support}` or
+`{developer}`, and `withMailboxes()` (`components/ui/mail-link.tsx`) turns each
+into a mail link set left to right, so it reads correctly inside Dari and
+Pashto sentences. The legal pages name `support@manzel.af` itself, not the live
+setting: a policy should not change under its "last updated" date. If the
+operator ever moves support to another address, change `site.email.support`
+and the date in `components/sections/legal.tsx` together.
+
+**Once a year:** `public/.well-known/security.txt` expires on 10 October 2027
+(its `Expires` line, RFC 9116). Move the date on by a year and redeploy before
+then; scanners ignore an expired file. It is served as it is in both modes: the
+proxy never sees files.
 
 ## Where things are
 
@@ -92,6 +116,7 @@ lib/mode.ts            the launch switch
 app/global-not-found   404 for paths outside every language
 app/sitemap.ts         every page × every language, with hreflang
 app/robots.ts, manifest.ts, icon.svg, apple-icon.png
+public/.well-known/security.txt   where to report a security problem (RFC 9116); renew yearly
 proxy.ts               / → /fa | /ps | /en  (cookie, then Accept-Language, then Dari)
 
 dictionaries/en.ts     the shape every language must match — fa.ts and ps.ts are
@@ -101,7 +126,7 @@ components/interactive/ the only client islands: role tabs, offline demo, fee ca
 components/mockups/    the app's screens drawn in HTML — localized, sharp, tiny
 lib/format.ts          numbers and money exactly as the app prints them (۱٬۵۰۰ ؋)
 lib/seo.ts             titles, canonical, hreflang, Open Graph for every page
-lib/site.ts            name, URL, store links, brand colours
+lib/site.ts            name, URL, store links, email addresses, brand colours
 scripts/generate-images.mts   social cards (public/og) and icons
 assets/brand/          the identity ("Taq", 2026-09-30): the designer's SVGs
 scripts/brand.mts      assets/brand → components/brand/paths.ts + app/icon.svg

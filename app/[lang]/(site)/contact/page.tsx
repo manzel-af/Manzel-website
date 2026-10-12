@@ -4,10 +4,12 @@ import { ContactOptions } from '@/components/sections/contact-options';
 import { Faq } from '@/components/sections/home';
 import { PageHero } from '@/components/sections/page-hero';
 import { Icon } from '@/components/ui/icon';
+import { MailLink } from '@/components/ui/mail-link';
 import { Container, Section } from '@/components/ui/section';
 import { getDictionary, localeFrom } from '@/lib/dictionary';
 import { getPlatformInfo } from '@/lib/platform';
 import { pageMetadata } from '@/lib/seo';
+import { site } from '@/lib/site';
 
 export async function generateMetadata({ params }: PageProps<'/[lang]/contact'>): Promise<Metadata> {
   return pageMetadata(await localeFrom(params), 'contact');
@@ -44,6 +46,22 @@ export default async function ContactPage({ params }: PageProps<'/[lang]/contact
               <Icon name="support" size={26} />
             </span>
             <p className="text-lg leading-relaxed text-white/85">{page.inApp}</p>
+          </div>
+
+          {/* Everything that is not help with the app: the company's own mailbox,
+              not the support line above. */}
+          <div className="reveal flex flex-col items-start gap-4 rounded-card border border-line bg-surface p-6 sm:flex-row sm:items-center sm:gap-5">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-accent-soft text-accent">
+              <Icon name="mail" size={23} />
+            </span>
+            <div className="flex-1">
+              <h2 className="font-extrabold text-fg">{page.generalTitle}</h2>
+              <p className="mt-1 leading-relaxed text-fg-muted">{page.generalBody}</p>
+            </div>
+            <MailLink
+              address={site.email.info}
+              className="text-lg font-extrabold text-fg transition-colors hover:text-primary"
+            />
           </div>
         </Container>
       </Section>

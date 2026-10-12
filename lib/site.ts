@@ -30,6 +30,27 @@ export const site = {
     apk: null as string | null,
   },
 
+  /**
+   * The company's mailboxes, each for one kind of message, spelled once here.
+   * Copy names them as `{info}`, `{support}`, `{developer}` (withMailboxes in
+   * components/ui/mail-link.tsx).
+   *
+   * Support is also the platform's live contact: platform_settings.support_email,
+   * which the operator changes in the app (Operator console → Settings) and
+   * lib/platform.ts reads with the fee. `support` here is that address as V034
+   * set it: what the site shows when the database cannot be read, and the one
+   * the privacy policy, terms and delete-account page name — a legal text
+   * should not change under its "last updated" date.
+   */
+  email: {
+    /** General questions: partnerships, the press, anything that is not help with the app. */
+    info: 'info@manzel.af',
+    /** Help with the app, and requests about a person's own data, deletion included. */
+    support: 'support@manzel.af',
+    /** Security reports (public/.well-known/security.txt) and technical questions. */
+    developer: 'developer@manzel.af',
+  },
+
   /** Brand colours used where a CSS variable cannot reach (OG images, manifest). */
   colors: {
     lapis600: '#1E4E8C',

@@ -1,7 +1,8 @@
 /**
  * The platform's support contacts, as the operator console has them — the
  * same numbers a suspended building is shown in the app. Only the ones that
- * are set appear.
+ * are set appear; when the settings cannot be read at all, the support
+ * mailbox still does (lib/platform.ts).
  */
 
 import { Icon, type IconName } from '@/components/ui/icon';

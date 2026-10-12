@@ -4,9 +4,13 @@
  *
  * The date is written on the Shamsi calendar, as every date in the app is,
  * with the Gregorian date alongside on the English page.
+ *
+ * Where a text names a mailbox (`{support}`), it becomes a mail link set left
+ * to right, so the address reads correctly inside a Dari or Pashto sentence.
  */
 
 import { PageHero } from '@/components/sections/page-hero';
+import { withMailboxes } from '@/components/ui/mail-link';
 import { Container } from '@/components/ui/section';
 import type { Dictionary } from '@/lib/dictionary';
 import { localizeDigits } from '@/lib/format';
@@ -14,9 +18,9 @@ import type { Locale } from '@/lib/i18n';
 
 /** When the privacy policy and terms last changed. Update with the text. */
 const UPDATED = {
-  iso: '2026-10-05',
-  // 13 Mizan 1405 in the Solar Hijri calendar.
-  label: { fa: '۱۳ میزان ۱۴۰۵', ps: '۱۳ تله ۱۴۰۵', en: '13 Mizan 1405 (5 October 2026)' } as Record<Locale, string>,
+  iso: '2026-10-11',
+  // 19 Mizan 1405 in the Solar Hijri calendar.
+  label: { fa: '۱۹ میزان ۱۴۰۵', ps: '۱۹ تله ۱۴۰۵', en: '19 Mizan 1405 (11 October 2026)' } as Record<Locale, string>,
 };
 
 export function LegalDocument({
@@ -71,7 +75,9 @@ export function LegalDocument({
                 <span className="text-base font-extrabold text-accent">{localizeDigits(String(index + 1), locale)}.</span>
                 {section.title}
               </h2>
-              <p className="mt-4 text-lg leading-loose text-fg-muted">{section.body}</p>
+              <p className="mt-4 text-lg leading-loose text-fg-muted">
+                {withMailboxes(section.body, 'font-bold text-primary underline-offset-4 hover:underline')}
+              </p>
             </section>
           ))}
         </article>

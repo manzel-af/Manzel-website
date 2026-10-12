@@ -18,6 +18,10 @@ import { isLive, SOON_OG_PREFIX, SOON_SEGMENT } from '@/lib/mode';
  *    - the full site's social cards (/og/fa.jpg…) answer 404: they carry the
  *      site's headline.
  *    Once live, the coming-soon route itself is hidden instead.
+ *
+ * Other files never come here (the matcher below), so they answer the same in
+ * both modes. /.well-known/security.txt depends on that: the address for
+ * reporting a security problem must not wait for the launch.
  */
 /** Reachable while coming soon: the app links to them and the stores check them. */
 const OPEN_WHILE_SOON = new Set(['privacy', 'terms', 'delete-account', 'contact']);
@@ -69,6 +73,7 @@ function redirectTo(request: NextRequest, pathname: string) {
 export const config = {
   matcher: [
     // Pages: everything except Next's internals, metadata routes and files.
+    // A dot anywhere in the path means a file, and /.well-known/ has one.
     '/((?!_next|api|sitemap.xml|robots.txt|manifest.webmanifest|icon|apple-icon|opengraph-image|.*\\..*).*)',
     // Social cards, which the launch switch gates.
     '/og/:path*',

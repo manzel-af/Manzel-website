@@ -11,10 +11,14 @@
  * Revalidated hourly: every page stays static and instant, and a change in the
  * console reaches the website within the hour without a redeploy. If Supabase
  * is unreachable at build time, the defaults below are used — a slightly stale
- * price beats a failed build.
+ * price beats a failed build, and the support mailbox beats "contacts coming
+ * soon". A row that CAN be read is taken as it is, empty contacts included:
+ * clearing one in the console hides it, here as in the app.
  */
 
 import 'server-only';
+
+import { site } from './site';
 
 export interface PlatformInfo {
   /** Minor units: 50000 is 500 ؋. */
@@ -29,7 +33,10 @@ export interface PlatformInfo {
   live: boolean;
 }
 
-/** The V025 defaults, used only when the database cannot be read. */
+/**
+ * The V025 fee defaults and V034's support address, used only when the
+ * database cannot be read. There is no default phone or WhatsApp number.
+ */
 const FALLBACK: PlatformInfo = {
   monthlyFeeMinor: 50000,
   currency: 'AFN',
@@ -37,7 +44,7 @@ const FALLBACK: PlatformInfo = {
   billingEnabled: true,
   supportPhone: null,
   supportWhatsapp: null,
-  supportEmail: null,
+  supportEmail: site.email.support,
   live: false,
 };
 

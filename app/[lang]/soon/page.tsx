@@ -269,6 +269,7 @@ export default async function ComingSoonPage({ params }: PageProps<'/[lang]/soon
               alternateName: site.wordmark,
               url: absoluteUrl('/'),
               logo: absoluteUrl('/icon.svg'),
+              email: site.email.info,
             },
             {
               '@type': 'WebSite',

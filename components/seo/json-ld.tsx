@@ -22,7 +22,11 @@ export function JsonLd({ data }: { data: Record<string, unknown> | Record<string
   );
 }
 
-/** Organization, WebSite and the app itself, on every page. */
+/**
+ * Organization, WebSite and the app itself, on every page. The organization's
+ * own email is the general mailbox; support (live, from the operator's
+ * settings) is its customer-support contact point.
+ */
 export function SiteJsonLd({ locale, dict, platform }: { locale: Locale; dict: Dictionary; platform: PlatformInfo }) {
   const home = absoluteUrl(`/${locale}`);
   const organization = {
@@ -32,6 +36,7 @@ export function SiteJsonLd({ locale, dict, platform }: { locale: Locale; dict: D
     alternateName: site.wordmark,
     url: absoluteUrl('/'),
     logo: absoluteUrl('/icon.svg'),
+    email: site.email.info,
     ...(platform.supportEmail || platform.supportPhone
       ? {
           contactPoint: {
